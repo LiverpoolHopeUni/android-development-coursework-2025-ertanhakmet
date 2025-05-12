@@ -8,17 +8,18 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="uk.ac.hope.mcse.android.coursework.FirstFragment"
-        android:label="@string/first_fragment_label"
+        android:label="Expense Tracker"
         tools:layout="@layout/fragment_first">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/SecondFragment"
         android:name="uk.ac.hope.mcse.android.coursework.SecondFragment"
-        android:label="@string/second_fragment_label"
+        android:label="Add Expense"
         tools:layout="@layout/fragment_second">
 
         <action

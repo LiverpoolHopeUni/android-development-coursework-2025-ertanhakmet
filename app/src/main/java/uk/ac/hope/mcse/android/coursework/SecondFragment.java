@@ -49,12 +49,19 @@ public class SecondFragment extends Fragment {
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view1, year1, month1, dayOfMonth) -> {
-                String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
-                binding.editTextDate.setText(selectedDate);
-            }, year, month, day);
+            DatePickerDialog dialog = new DatePickerDialog(
+                    requireContext(),
+                    (view1, year1, month1, dayOfMonth) -> {
+                        String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+                        binding.editTextDate.setText(selectedDate);
+                    },
+                    year, month, day
+            );
 
-            datePickerDialog.show();
+            // ❌ Prevent future dates
+            dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+            dialog.show();
         });
 
         // Save button
