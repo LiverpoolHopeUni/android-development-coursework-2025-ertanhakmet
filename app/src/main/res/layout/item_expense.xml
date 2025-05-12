@@ -37,7 +37,7 @@
             android:textSize="12sp"
             android:textColor="#888888" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package uk.ac.hope.mcse.android.coursework;
 
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         holder.dateText.setText(expense.getDate());
 
         holder.deleteButton.setOnClickListener(v -> {
-            expenseList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, expenseList.size());
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Expense")
+                    .setMessage("Are you sure you want to delete this expense?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        expenseList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, expenseList.size());
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
     }
 
