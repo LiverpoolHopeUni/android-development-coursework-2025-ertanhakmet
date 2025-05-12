@@ -3,6 +3,7 @@ package uk.ac.hope.mcse.android.coursework;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         holder.amountText.setText(String.format("£%.2f", expense.getAmount()));
         holder.categoryText.setText(expense.getCategory());
         holder.dateText.setText(expense.getDate());
+
+        holder.deleteButton.setOnClickListener(v -> {
+            expenseList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, expenseList.size());
+        });
     }
 
     @Override
@@ -41,12 +48,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     public static class ExpenseViewHolder extends RecyclerView.ViewHolder {
         TextView amountText, categoryText, dateText;
+        Button deleteButton;
 
         public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
             amountText = itemView.findViewById(R.id.textView_amount);
             categoryText = itemView.findViewById(R.id.textView_category);
             dateText = itemView.findViewById(R.id.textView_date);
+            deleteButton = itemView.findViewById(R.id.button_delete);
         }
     }
 }
