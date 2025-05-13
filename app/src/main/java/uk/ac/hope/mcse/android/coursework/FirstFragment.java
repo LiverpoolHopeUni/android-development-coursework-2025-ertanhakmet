@@ -42,9 +42,9 @@ public class FirstFragment extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_IncomeFragment)
         );
 
-        // Set up RecyclerView
+        // Set up RecyclerView with delete listener callback
         binding.recyclerViewExpenses.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new ExpenseAdapter(SecondFragment.expenseList);
+        adapter = new ExpenseAdapter(SecondFragment.expenseList, this::updateTotals);
         binding.recyclerViewExpenses.setAdapter(adapter);
 
         updateTotals();

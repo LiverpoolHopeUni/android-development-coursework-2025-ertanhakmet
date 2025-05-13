@@ -15,9 +15,12 @@ import java.util.List;
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
     private List<Expense> expenseList;
+    private OnExpenseDeletedListener deleteListener;
 
-    public ExpenseAdapter(List<Expense> expenseList) {
+    // Constructor with delete callback
+    public ExpenseAdapter(List<Expense> expenseList, OnExpenseDeletedListener listener) {
         this.expenseList = expenseList;
+        this.deleteListener = listener;
     }
 
     @NonNull
@@ -43,6 +46,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
                         expenseList.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, expenseList.size());
+
+                        // Trigger callback to update totals
+                        if (deleteListener != null) {
+                            deleteListener.onExpenseDeleted();
+                        }
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -65,5 +73,9 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             dateText = itemView.findViewById(R.id.textView_date);
             deleteButton = itemView.findViewById(R.id.button_delete);
         }
+    }
+
+    public interface OnExpenseDeletedListener {
+        void onExpenseDeleted();
     }
 }
