@@ -8,19 +8,17 @@
     android:padding="16dp"
     tools:context=".IncomeFragment">
 
-    <!-- Title -->
+    <!-- Prompt Text -->
     <TextView
-        android:id="@+id/textView_income_title"
+        android:id="@+id/textView_income_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Income"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:text="How much income did you receive?"
+        android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp" />
 
     <!-- Income Amount Input -->
     <EditText
@@ -30,10 +28,10 @@
         android:minHeight="48dp"
         android:hint="Enter amount"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/textView_income_title"
+        app:layout_constraintTop_toBottomOf="@id/textView_income_prompt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="16dp" />
 
     <!-- Save Income Button -->
     <Button
@@ -43,6 +41,5 @@
         android:text="Save Income"
         app:layout_constraintTop_toBottomOf="@id/editText_income_amount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
