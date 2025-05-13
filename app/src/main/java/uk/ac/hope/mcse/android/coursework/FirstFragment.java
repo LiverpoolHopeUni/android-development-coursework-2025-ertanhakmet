@@ -30,37 +30,47 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Navigate to Add Expense screen when button is clicked
+        // Navigate to Add Expense screen
         binding.buttonFirst.setOnClickListener(v ->
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment)
         );
 
-        // Set up RecyclerView to display expenses
+        // Navigate to Add Income screen
+        binding.buttonAddIncome.setOnClickListener(v ->
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_IncomeFragment)
+        );
+
+        // Set up RecyclerView
         binding.recyclerViewExpenses.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new ExpenseAdapter(SecondFragment.expenseList);
         binding.recyclerViewExpenses.setAdapter(adapter);
 
-        // Show the current total
-        updateTotalSpent();
+        updateTotals();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Refresh the list and total every time the screen comes back into focus
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        updateTotalSpent();
+        updateTotals();
     }
 
-    private void updateTotalSpent() {
-        double total = 0;
+    private void updateTotals() {
+        double totalSpent = 0;
         for (Expense e : SecondFragment.expenseList) {
-            total += e.getAmount();
+            totalSpent += e.getAmount();
         }
-        binding.textViewTotalSpent.setText(String.format("Total Spent: £%.2f", total));
+
+        double totalIncome = IncomeFragment.totalIncome;
+        double balance = totalIncome - totalSpent;
+
+        binding.textViewTotalSpent.setText(String.format("Total Spent: £%.2f", totalSpent));
+        binding.textViewTotalIncome.setText(String.format("Total Income: £%.2f", totalIncome));
+        binding.textViewBalance.setText(String.format("Balance: £%.2f", balance));
     }
 
     @Override

@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_IncomeFragment"
+            app:destination="@id/IncomeFragment" />
     </fragment>
 
     <fragment
@@ -24,6 +28,17 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/IncomeFragment"
+        android:name="uk.ac.hope.mcse.android.coursework.IncomeFragment"
+        android:label="Add Income"
+        tools:layout="@layout/fragment_income">
+
+        <action
+            android:id="@+id/action_IncomeFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>

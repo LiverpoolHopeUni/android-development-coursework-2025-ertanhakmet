@@ -37,7 +37,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Category options
+        // Categories
         String[] categories = {"Food", "Transport", "Rent", "Shopping", "Other"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         binding.spinnerCategory.setAdapter(adapter);
@@ -58,7 +58,7 @@ public class SecondFragment extends Fragment {
                     year, month, day
             );
 
-            // ❌ Prevent future dates
+            // Prevent future dates
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
             dialog.show();
