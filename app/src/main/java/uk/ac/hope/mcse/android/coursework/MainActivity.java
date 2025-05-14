@@ -1,7 +1,12 @@
 package uk.ac.hope.mcse.android.coursework;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +18,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.snackbar.Snackbar;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import uk.ac.hope.mcse.android.coursework.databinding.ActivityMainBinding;
 
@@ -35,16 +42,70 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show()
-        );
+        binding.fab.setOnClickListener(view -> {
+            StringBuilder exportData = new StringBuilder();
+            exportData.append("--- Expense Tracker Report ---\n\nExpenses:\n");
+
+            for (Expense e : SecondFragment.expenseList) {
+                exportData.append(String.format("£%.2f - %s (%s)\n", e.getAmount(), e.getCategory(), e.getDate()));
+            }
+
+            double totalSpent = 0;
+            for (Expense e : SecondFragment.expenseList) {
+                totalSpent += e.getAmount();
+            }
+
+            double totalIncome = IncomeFragment.totalIncome;
+            double balance = totalIncome - totalSpent;
+
+            exportData.append("\nTotal Spent: £").append(String.format("%.2f", totalSpent));
+            exportData.append("\nTotal Income: £").append(String.format("%.2f", totalIncome));
+            exportData.append("\nBalance: £").append(String.format("%.2f", balance));
+
+            String fileName = "expense_report_" + System.currentTimeMillis() + ".txt";
+
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    // API 29+ — Save to Downloads folder
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
+                    values.put(MediaStore.Downloads.MIME_TYPE, "text/plain");
+                    values.put(MediaStore.Downloads.IS_PENDING, 1);
+
+                    ContentResolver resolver = getContentResolver();
+                    Uri collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                    Uri fileUri = resolver.insert(collection, values);
+
+                    if (fileUri != null) {
+                        try (OutputStream out = resolver.openOutputStream(fileUri)) {
+                            out.write(exportData.toString().getBytes());
+                        }
+                        values.clear();
+                        values.put(MediaStore.Downloads.IS_PENDING, 0);
+                        resolver.update(fileUri, values, null, null);
+                        Toast.makeText(this, "Exported to Downloads", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    // API 26–28 — Save to app's private external storage
+                    File file = new File(getExternalFilesDir(null), fileName);
+                    try (FileOutputStream out = new FileOutputStream(file)) {
+                        out.write(exportData.toString().getBytes());
+                    }
+                    Toast.makeText(this, "Saved to app storage:\n" + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Export failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Only show Reset All Data in the menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -58,12 +119,9 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", (dialog, which) -> {
                         SecondFragment.expenseList.clear();
                         IncomeFragment.totalIncome = 0;
-
-                        // Notify FirstFragment if it's visible
                         if (FirstFragment.instance != null) {
                             FirstFragment.instance.updateTotalsAndRefresh();
                         }
-
                         Toast.makeText(this, "Data reset successfully", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
