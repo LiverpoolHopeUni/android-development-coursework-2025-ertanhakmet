@@ -28,6 +28,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:contentDescription="@string/export_data"
+        app:srcCompat="@drawable/baseline_file_download_done_24" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

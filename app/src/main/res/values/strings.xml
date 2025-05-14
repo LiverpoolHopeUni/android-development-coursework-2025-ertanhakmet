@@ -49,4 +49,5 @@
     <string name="what_did_you_spend_it_on">What did you spend it on?</string>
     <string name="e_g_12_99">e.g. 12.99</string>
     <string name="how_much_did_you_spend">How much did you spend?</string>
+    <string name="export_data">Export data</string>
 </resources>
