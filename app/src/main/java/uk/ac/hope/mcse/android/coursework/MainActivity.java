@@ -1,22 +1,21 @@
 package uk.ac.hope.mcse.android.coursework;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import uk.ac.hope.mcse.android.coursework.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import uk.ac.hope.mcse.android.coursework.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,29 +35,39 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.fab.setOnClickListener(view ->
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
+                        .setAction("Action", null).show()
+        );
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Only show Reset All Data in the menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        if (item.getItemId() == R.id.action_reset) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Reset All Data")
+                    .setMessage("Are you sure you want to delete all income and expenses?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        SecondFragment.expenseList.clear();
+                        IncomeFragment.totalIncome = 0;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+                        // Notify FirstFragment if it's visible
+                        if (FirstFragment.instance != null) {
+                            FirstFragment.instance.updateTotalsAndRefresh();
+                        }
+
+                        Toast.makeText(this, "Data reset successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
             return true;
         }
 

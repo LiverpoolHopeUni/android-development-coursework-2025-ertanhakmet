@@ -14,6 +14,8 @@ import uk.ac.hope.mcse.android.coursework.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
 
+    public static FirstFragment instance;
+
     private FragmentFirstBinding binding;
     private ExpenseAdapter adapter;
 
@@ -29,6 +31,8 @@ public class FirstFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        instance = this;
 
         // Navigate to Add Expense screen
         binding.buttonFirst.setOnClickListener(v ->
@@ -59,7 +63,7 @@ public class FirstFragment extends Fragment {
         updateTotals();
     }
 
-    private void updateTotals() {
+    public void updateTotals() {
         double totalSpent = 0;
         for (Expense e : SecondFragment.expenseList) {
             totalSpent += e.getAmount();
@@ -73,9 +77,18 @@ public class FirstFragment extends Fragment {
         binding.textViewBalance.setText(String.format("Balance: £%.2f", balance));
     }
 
+    // Called from MainActivity after data reset
+    public void updateTotalsAndRefresh() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+        updateTotals();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        instance = null;
     }
 }
