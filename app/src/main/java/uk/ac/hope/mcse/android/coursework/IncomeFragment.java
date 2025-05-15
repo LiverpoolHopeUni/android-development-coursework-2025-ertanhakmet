@@ -46,6 +46,9 @@ public class IncomeFragment extends Fragment {
 
                 totalIncome += amount;
 
+                // ✅ Save updated income and expenses
+                DataStorageHelper.saveData(requireContext(), totalIncome, SecondFragment.expenseList);
+
                 Toast.makeText(getContext(), "Income added successfully", Toast.LENGTH_SHORT).show();
 
                 NavHostFragment.findNavController(IncomeFragment.this)

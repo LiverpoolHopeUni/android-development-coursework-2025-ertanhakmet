@@ -79,6 +79,10 @@ public class SecondFragment extends Fragment {
                 double amount = Double.parseDouble(amountStr);
                 Expense expense = new Expense(amount, category, date);
                 expenseList.add(expense);
+
+                // ✅ Save to file
+                DataStorageHelper.saveData(requireContext(), IncomeFragment.totalIncome, expenseList);
+
                 Toast.makeText(requireContext(), "Expense saved", Toast.LENGTH_SHORT).show();
 
                 // Navigate back to FirstFragment

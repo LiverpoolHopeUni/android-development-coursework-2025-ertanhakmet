@@ -34,6 +34,9 @@ public class FirstFragment extends Fragment {
 
         instance = this;
 
+        // ✅ Load saved income and expenses
+        DataStorageHelper.loadData(requireContext());
+
         // Navigate to Add Expense screen
         binding.buttonFirst.setOnClickListener(v ->
                 NavHostFragment.findNavController(FirstFragment.this)

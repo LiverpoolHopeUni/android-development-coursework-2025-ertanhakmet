@@ -47,6 +47,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, expenseList.size());
 
+                        // ✅ Save updated data after deleting
+                        DataStorageHelper.saveData(
+                                holder.itemView.getContext(),
+                                IncomeFragment.totalIncome,
+                                expenseList
+                        );
+
                         // Trigger callback to update totals
                         if (deleteListener != null) {
                             deleteListener.onExpenseDeleted();

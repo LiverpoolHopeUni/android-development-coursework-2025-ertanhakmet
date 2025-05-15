@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +20,8 @@ import androidx.navigation.ui.NavigationUI;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import uk.ac.hope.mcse.android.coursework.databinding.ActivityMainBinding;
 
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    // API 29+ — Save to Downloads folder
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
                     values.put(MediaStore.Downloads.MIME_TYPE, "text/plain");
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (fileUri != null) {
                         try (OutputStream out = resolver.openOutputStream(fileUri)) {
-                            out.write(exportData.toString().getBytes());
+                            out.write(exportData.toString().getBytes(StandardCharsets.UTF_8));
                         }
                         values.clear();
                         values.put(MediaStore.Downloads.IS_PENDING, 0);
@@ -89,10 +89,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    // API 26–28 — Save to app's private external storage
                     File file = new File(getExternalFilesDir(null), fileName);
                     try (FileOutputStream out = new FileOutputStream(file)) {
-                        out.write(exportData.toString().getBytes());
+                        out.write(exportData.toString().getBytes(StandardCharsets.UTF_8));
                     }
                     Toast.makeText(this, "Saved to app storage:\n" + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
                 }
@@ -119,9 +118,14 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", (dialog, which) -> {
                         SecondFragment.expenseList.clear();
                         IncomeFragment.totalIncome = 0;
+
+                        // ✅ Save the cleared state to file
+                        DataStorageHelper.saveData(this, 0, new ArrayList<>());
+
                         if (FirstFragment.instance != null) {
                             FirstFragment.instance.updateTotalsAndRefresh();
                         }
+
                         Toast.makeText(this, "Data reset successfully", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
