@@ -18,6 +18,7 @@ public class IncomeFragment extends Fragment {
 
     private FragmentIncomeBinding binding;
 
+    // This function creates and returns the view for the income fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class IncomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    // This function deals with save income button
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -46,7 +48,7 @@ public class IncomeFragment extends Fragment {
 
                 totalIncome += amount;
 
-                // ✅ Save updated income and expenses
+                // Save updated income and expenses
                 DataStorageHelper.saveData(requireContext(), totalIncome, SecondFragment.expenseList);
 
                 Toast.makeText(getContext(), "Income added successfully", Toast.LENGTH_SHORT).show();

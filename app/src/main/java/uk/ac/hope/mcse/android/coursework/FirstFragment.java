@@ -34,7 +34,7 @@ public class FirstFragment extends Fragment {
 
         instance = this;
 
-        // ✅ Load saved income and expenses
+        // Load saved income and expenses
         DataStorageHelper.loadData(requireContext());
 
         // Navigate to Add Expense screen
@@ -49,7 +49,7 @@ public class FirstFragment extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_IncomeFragment)
         );
 
-        // Set up RecyclerView with delete listener callback
+        // Set up RecyclerView with delete button
         binding.recyclerViewExpenses.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new ExpenseAdapter(SecondFragment.expenseList, this::updateTotals);
         binding.recyclerViewExpenses.setAdapter(adapter);
@@ -66,6 +66,7 @@ public class FirstFragment extends Fragment {
         updateTotals();
     }
 
+    // This function calculates total spend by looping through expenses
     public void updateTotals() {
         double totalSpent = 0;
         for (Expense e : SecondFragment.expenseList) {
@@ -80,7 +81,6 @@ public class FirstFragment extends Fragment {
         binding.textViewBalance.setText(String.format("Balance: £%.2f", balance));
     }
 
-    // Called from MainActivity after data reset
     public void updateTotalsAndRefresh() {
         if (adapter != null) {
             adapter.notifyDataSetChanged();

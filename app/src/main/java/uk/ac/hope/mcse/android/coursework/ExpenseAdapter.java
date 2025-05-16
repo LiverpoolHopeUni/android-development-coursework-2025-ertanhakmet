@@ -17,12 +17,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
     private List<Expense> expenseList;
     private OnExpenseDeletedListener deleteListener;
 
-    // Constructor with delete callback
+    // Constructor
     public ExpenseAdapter(List<Expense> expenseList, OnExpenseDeletedListener listener) {
         this.expenseList = expenseList;
         this.deleteListener = listener;
     }
 
+    // This function creates and returns a new ExpenseViewHolder for item_expense.xml layout.
     @NonNull
     @Override
     public ExpenseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,6 +32,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         return new ExpenseViewHolder(view);
     }
 
+    // This function fills every RecycleView item with expense data and puts a delete button next to them. Also it asks
+    // for confirmation if the user clicks delete button.
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
         Expense expense = expenseList.get(position);
@@ -47,14 +50,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, expenseList.size());
 
-                        // ✅ Save updated data after deleting
                         DataStorageHelper.saveData(
                                 holder.itemView.getContext(),
                                 IncomeFragment.totalIncome,
                                 expenseList
                         );
 
-                        // Trigger callback to update totals
                         if (deleteListener != null) {
                             deleteListener.onExpenseDeleted();
                         }
@@ -69,6 +70,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         return expenseList.size();
     }
 
+    // This function defines the structure for expense item. It has references for amount, category, date and delete button.
     public static class ExpenseViewHolder extends RecyclerView.ViewHolder {
         TextView amountText, categoryText, dateText;
         Button deleteButton;

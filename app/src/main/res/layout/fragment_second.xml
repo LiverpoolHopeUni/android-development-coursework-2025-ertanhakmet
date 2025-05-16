@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"/>
 
-        <!-- Save Button (reused from button_second) -->
+        <!-- Save Button -->
         <Button
             android:id="@+id/button_second"
             android:layout_width="wrap_content"

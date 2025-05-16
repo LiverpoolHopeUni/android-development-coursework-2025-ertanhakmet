@@ -14,16 +14,15 @@ public class DataStorageHelper {
 
     private static final String FILE_NAME = "expenses_data.txt";
 
+    // This function creates a new file and writes income, amount, category and data for each expense
     public static void saveData(Context context, double totalIncome, List<Expense> expenseList) {
         try {
             File file = new File(context.getFilesDir(), FILE_NAME);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
 
-            // First line = income
             writer.write("INCOME:" + totalIncome);
             writer.newLine();
 
-            // Expenses
             for (Expense e : expenseList) {
                 writer.write(e.getAmount() + "|" + e.getCategory() + "|" + e.getDate());
                 writer.newLine();
@@ -35,7 +34,7 @@ public class DataStorageHelper {
         }
     }
 
-    // Load income and expenses
+    // This function loads data from the internal storage, so users will not lose data even if they shut down the app
     public static void loadData(Context context) {
         try {
             File file = new File(context.getFilesDir(), FILE_NAME);

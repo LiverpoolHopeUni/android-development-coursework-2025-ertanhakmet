@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
+    // This function sets up the main activity and handles file export using fab button and puts that file in downloads
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // This function handles the reset all data button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_reset) {
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         SecondFragment.expenseList.clear();
                         IncomeFragment.totalIncome = 0;
 
-                        // ✅ Save the cleared state to file
+                        // Save the cleared state to file
                         DataStorageHelper.saveData(this, 0, new ArrayList<>());
 
                         if (FirstFragment.instance != null) {

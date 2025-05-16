@@ -22,7 +22,6 @@ public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
 
-    // Temporary storage for expenses
     public static List<Expense> expenseList = new ArrayList<>();
 
     @Override
@@ -58,7 +57,7 @@ public class SecondFragment extends Fragment {
                     year, month, day
             );
 
-            // Prevent future dates
+            // Prevent the selection of future dates
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
             dialog.show();
@@ -80,7 +79,7 @@ public class SecondFragment extends Fragment {
                 Expense expense = new Expense(amount, category, date);
                 expenseList.add(expense);
 
-                // ✅ Save to file
+                // Save to file
                 DataStorageHelper.saveData(requireContext(), IncomeFragment.totalIncome, expenseList);
 
                 Toast.makeText(requireContext(), "Expense saved", Toast.LENGTH_SHORT).show();
